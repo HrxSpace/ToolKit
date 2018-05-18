@@ -50,6 +50,9 @@ BOOLEAN append_tail_node(DATA_LIST_L *lp, void *bp);
 /* 删除指定节点 */
 void del_node(DATA_LIST_L *lp, void *bp);
 
+/* 删除链表头节点 */
+void del_head_node(DATA_LIST_L *lp);
+
 /* 删除链表尾节点 */
 void del_tail_node(DATA_LIST_L *lp);
 
