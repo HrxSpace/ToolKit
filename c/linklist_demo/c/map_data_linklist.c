@@ -239,7 +239,7 @@ void node_pack(DATA_NODE_L *node ,void *pdata, INT32U size_pdata, INT8U node_typ
 
 	node->node_type = node_type;
 	node->size_data = size_pdata;
-	node->data = FK_MALLOC(sizeof(size_pdata));
+	node->data = FK_MALLOC(size_pdata);
 	node->next = PNULL;
 	memcpy(node->data, pdata, size_pdata);
 
