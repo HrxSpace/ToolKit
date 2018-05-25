@@ -44,7 +44,6 @@ typedef signed   long long          INT64S;                     /* 64位有符�
 typedef float                       FP32;                       /* 32位浮点数 */
 typedef double                      FP64;                       /* 64位浮点数 */
 
-
 #ifdef __cplusplus
 	}
 #endif

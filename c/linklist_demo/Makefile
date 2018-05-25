@@ -16,4 +16,5 @@ SOURCES		+= ${wildcard c/*.c}
 all:
 	${BUILD_GCC} ${SOURCES} ${CFLAGS} -o ${TARGET}
 
-	
+clean:
+	rm *.o *.exe

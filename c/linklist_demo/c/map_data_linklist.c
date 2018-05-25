@@ -11,7 +11,6 @@
 **===============================================================================
 **| 2018/05/15 | 黄睿欣 |  创建该文件
 *********************************************************************************/
-#include <stdio.h>
 #include <string.h>
 
 #include "map_data_linklist.h"
@@ -44,12 +43,12 @@ BOOLEAN link_init(DATA_LIST_L *lp)
 ** 返回:       TRUE:    成功
 **           FALSE:   失败
 ********************************************************************/
-BOOLEAN append_tail_node(DATA_LIST_L *lp, void *bp)
+void append_tail_node(DATA_LIST_L *lp, void *bp)
 {
     DATA_NODE_L *cur_node;
 
-    if (lp == 0 || bp == 0) {
-        return FALSE;
+    if (PNULL == lp ||PNULL == bp) {
+        return;
     }
 
     cur_node = (DATA_NODE_L *)bp;
@@ -62,8 +61,6 @@ BOOLEAN append_tail_node(DATA_LIST_L *lp, void *bp)
     cur_node->next = PNULL;
     lp->tail = cur_node;
     lp->item_num++;
-	
-    return TRUE;
 }
 
 /*******************************************************************
@@ -75,7 +72,6 @@ BOOLEAN append_tail_node(DATA_LIST_L *lp, void *bp)
 void del_node(DATA_LIST_L *lp, void *bp)
 {
     DATA_NODE_L *cur_node, *prv_node, *next_node;
-	data_t *d;
 
     if (PNULL == lp || PNULL == bp) {
 		return;
@@ -87,13 +83,9 @@ void del_node(DATA_LIST_L *lp, void *bp)
 
     lp->item_num--;
     cur_node  = (DATA_NODE_L *)bp;
-	d = (data_t *)cur_node->data;
     prv_node  = cur_node->prv;
     next_node = cur_node->next;
-	printf("cur_node = %p, prv_node = %p, next_node = %p\n", cur_node, prv_node, next_node);
-	printf("cur_node->size_data = %d, cur_node->node_type = %d, cur_node->data = %p\n", 
-		cur_node->size_data, cur_node->node_type, cur_node->data);
-	printf("del --- arg1 = %d, arg2 = %d, arg3 = %d\n", d->arg1, d->arg2, d->arg3);
+	
     if (PNULL == prv_node) {
         lp->head = next_node;
     } else {
@@ -105,12 +97,10 @@ void del_node(DATA_LIST_L *lp, void *bp)
         next_node->prv = prv_node;
     }
 
-	FK_FREE(cur_node->data);
+	if(PNULL != cur_node->data){
+		FK_FREE(cur_node->data);
+	}
 	FK_FREE(cur_node);
-	printf("cur_node->size_data = %d, cur_node->node_type = %d, cur_node->data = %p\n", 
-		cur_node->size_data, cur_node->node_type, cur_node->data);
-
-	printf("del --- arg1 = %d, arg2 = %d, arg3 = %d\n", d->arg1, d->arg2, d->arg3);
 }
 
 /*******************************************************************
@@ -122,7 +112,11 @@ void del_head_node(DATA_LIST_L *lp)
 {
     void *bp;
 
-    if (PNULL == lp || 0 == lp->item_num) {
+    if (PNULL == lp) {
+		return;
+	}
+	
+	if (0 == lp->item_num){
 		return;
 	}
 
@@ -139,12 +133,15 @@ void del_tail_node(DATA_LIST_L *lp)
 {
     void *bp;
 
-    if (PNULL == lp || 0 == lp->item_num) {
+    if (PNULL == lp) {
+		return;
+	}
+	
+	if (0 == lp->item_num){
 		return;
 	}
 
     bp = (void *)lp->tail;
-	printf("tail = %p\n", bp);
     del_node(lp, bp);
 }
 
@@ -158,7 +155,11 @@ void del_all_prv_node(DATA_LIST_L *lp, void *bp)
 {
 	DATA_NODE_L *cur_node, *prv_node;
 
-	if (PNULL == lp || 0 == lp->item_num) {
+    if (PNULL == lp) {
+		return;
+	}
+	
+	if (0 == lp->item_num){
 		return;
 	}
 
@@ -214,10 +215,8 @@ void * create_node()
 
 	node = (DATA_NODE_L *)FK_MALLOC(sizeof(DATA_NODE_L));
 	node->data = PNULL;
-	node->node_type = 0;
 	node->next = PNULL;
 	node->prv = PNULL;
-	node->size_data = 0;
 
 	return (void *)node;
 }
@@ -227,23 +226,18 @@ void * create_node()
  ** 函数描述: 将数据打包到节点
  ** 参数: [in] pdata: 数据域
  **       [in] size_pdata: 数据大小
- **       [in] node_type:链表的标识
  ********************************************************************/
-void node_pack(DATA_NODE_L *node ,void *pdata, INT32U size_pdata, INT8U node_type)
+void node_pack(DATA_NODE_L *node ,void *pdata, INT32U size_pdata)
 {
-	data_t *data;
-
 	if(PNULL == node){
 		return;
 	}
 
-	node->node_type = node_type;
-	node->size_data = size_pdata;
+	if(PNULL == pdata || 0 == size_pdata){
+		return;
+	}
 	node->data = FK_MALLOC(size_pdata);
 	node->next = PNULL;
 	memcpy(node->data, pdata, size_pdata);
-
-	data = (data_t *)pdata;
-	printf("arg1 = %d, arg2 = %d, arg3 = %d\n", data->arg1, data->arg2, data->arg3);
 }
 

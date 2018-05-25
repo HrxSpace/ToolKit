@@ -22,12 +22,10 @@
 #include "types.h"
 
 typedef struct data_node{
-	INT8U node_type;                        /* 链表标识，用以区分不同链表 */
     void *data;                             /* 数据域 */
-	INT32U size_data;                       /* 数据域大小 */
 	struct data_node *prv;                  /* 指向上一个链表的指针 */  
     struct data_node *next;                 /* 指向下一个链表的指针 */
-} DATA_NODE_L;        /* 数据链表结构 */
+} DATA_NODE_L;        /* 数据链表节点结构 */
 
 typedef struct {
 	INT16U       item_num;                  /* 节点的个数 */
@@ -35,17 +33,11 @@ typedef struct {
     DATA_NODE_L *tail;                      /* 链表尾 */
 } DATA_LIST_L;        /* 数据链表结构 */
 
-typedef struct data {
-	INT8U arg1;
-	INT16U arg2;
-	INT32U arg3;
-} data_t;        /* 测试结构 */
-
 /* 初始化链表 */
 BOOLEAN link_init(DATA_LIST_L *lp);
 
 /* 在链表尾上追加一个节点 */
-BOOLEAN append_tail_node(DATA_LIST_L *lp, void *bp);
+void append_tail_node(DATA_LIST_L *lp, void *bp);
 
 /* 删除指定节点 */
 void del_node(DATA_LIST_L *lp, void *bp);
@@ -65,12 +57,13 @@ void * get_node(DATA_LIST_L *lp, INT16U no);
 /* 创建一个空节点 */
 void * create_node();
 
+/* 将数据打包到节点 */
+void node_pack(DATA_NODE_L *node, void *pdata, INT32U size_pdata);
 
 #ifdef __cplusplus
 	}
 #endif
 	
 #endif    /* end of _H_MAP_DATA_LINKLIST_ */
-/* 将数据打包到节点 */
-void node_pack(DATA_NODE_L *node, void *pdata, INT32U size_pdata, INT8U link_sign);
+
 
